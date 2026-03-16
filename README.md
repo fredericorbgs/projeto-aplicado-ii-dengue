@@ -1,41 +1,60 @@
 # Projeto Aplicado II — Dengue
 
-Projeto da disciplina **Projeto Aplicado II** com foco em **análise textual e classificação de documentos epidemiológicos sobre dengue no Brasil**, utilizando dados públicos oficiais do **Ministério da Saúde**.
+## Tema do projeto
+Análise de dados epidemiológicos relacionados à dengue no Brasil, com foco em organização, preparação e modelagem de dados para apoiar análises acadêmicas e tomada de decisão baseada em evidências.
 
 ## Objetivo
-Desenvolver uma base textual estruturada e um protótipo analítico capaz de organizar e classificar documentos epidemiológicos sobre dengue, apoiando o monitoramento em saúde pública.
+Estruturar e desenvolver um pipeline de ciência de dados para:
+- coletar e organizar dados sobre dengue;
+- realizar pré-processamento e padronização;
+- explorar possibilidades de modelagem e avaliação;
+- documentar resultados por etapas do projeto.
 
-## Organização / fonte institucional
-- Ministério da Saúde do Brasil
-
-## Problema
-Há grande volume de documentos públicos sobre dengue, mas a leitura, organização e interpretação manual dessas informações são lentas, dispersas e pouco escaláveis.
-
-## Solução proposta
-Construção de uma base textual com metadados padronizados e desenvolvimento de um produto analítico de classificação temática de documentos e trechos textuais.
-
-## Estrutura do repositório
-- `data/`: bases brutas, intermediárias e tratadas
-- `docs/`: documentação conceitual e metodológica
-- `notebooks/`: análises exploratórias e experimentos
-- `reports/`: entregas formais por etapa
-- `src/`: scripts do projeto
-- `references/`: links e materiais de referência
+## Fonte institucional principal
+- **Ministério da Saúde (Brasil)**
 
 ## Etapas do projeto
-- **Etapa 1:** apresentação, objetivos, metas e milestones
-- **Etapa 2:** definição do produto analítico
-- **Etapa 3:** apresentação de produtos e storytelling
-- **Etapa 4:** apresentação dos resultados
+- **Etapa 1:** Definição do escopo, organização inicial e levantamento de fontes de dados ✅
+- **Etapa 2:** Coleta e preparação de dados
+- **Etapa 3:** Modelagem e análise
+- **Etapa 4:** Avaliação final e consolidação dos resultados
+
+## Estrutura do repositório
+```text
+.
+├── data/
+│   ├── raw/
+│   ├── interim/
+│   ├── processed/
+│   ├── external/
+│   └── README.md
+├── docs/
+│   ├── escopo-projeto.md
+│   ├── fontes-dados.md
+│   ├── metadados.md
+│   └── cronograma.md
+├── notebooks/
+│   └── README.md
+├── reports/
+│   ├── etapa-1/
+│   ├── etapa-2/
+│   ├── etapa-3/
+│   ├── etapa-4/
+│   └── README.md
+├── references/
+│   └── links-uteis.md
+├── src/
+│   ├── __init__.py
+│   ├── config.py
+│   ├── data_collection.py
+│   ├── preprocessing.py
+│   ├── modeling.py
+│   └── evaluation.py
+└── requirements.txt
+```
 
 ## Integrantes
-- Ana Clara Silva de Souza
-- Cid Wallace Araujo de Oliveira
-- Eduardo Machado Silva
-- Frederico Ripamonte Borges
+- Inserir nome dos integrantes do grupo
 
 ## Status
-✅ Etapa 1 concluída
-
-## Link do relatório da Etapa 1
-Adicionar em `reports/etapa-1/Etapa1.pdf`
+- **Etapa 1 concluída.**
