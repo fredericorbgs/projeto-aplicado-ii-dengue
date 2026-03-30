@@ -1,60 +1,120 @@
-# Projeto Aplicado II — Dengue
+# Projeto Aplicado II - Dengue
 
-## Tema do projeto
-Análise de dados epidemiológicos relacionados à dengue no Brasil, com foco em organização, preparação e modelagem de dados para apoiar análises acadêmicas e tomada de decisão baseada em evidências.
+Projeto academico da disciplina Projeto Aplicado II (UPM), com foco em analise textual e classificacao supervisionada de boletins epidemiologicos sobre dengue/arboviroses.
 
-## Objetivo
-Estruturar e desenvolver um pipeline de ciência de dados para:
-- coletar e organizar dados sobre dengue;
-- realizar pré-processamento e padronização;
-- explorar possibilidades de modelagem e avaliação;
-- documentar resultados por etapas do projeto.
+## Problema de pesquisa
 
-## Fonte institucional principal
-- **Ministério da Saúde (Brasil)**
+Boletins epidemiologicos oficiais possuem alto valor informacional para vigilancia em saude, mas apresentam:
 
-## Etapas do projeto
-- **Etapa 1:** Definição do escopo, organização inicial e levantamento de fontes de dados ✅
-- **Etapa 2:** Coleta e preparação de dados
-- **Etapa 3:** Modelagem e análise
-- **Etapa 4:** Avaliação final e consolidação dos resultados
+- volume textual elevado;
+- atualizacao frequente;
+- formatos heterogeneos para leitura analitica manual.
 
-## Estrutura do repositório
+Este projeto organiza e prepara esse corpus para sustentar analise exploratoria e modelagem de classificacao textual.
+
+## Objetivo geral
+
+Construir um pipeline reprodutivel de ciencia de dados para:
+
+1. coletar/importar boletins oficiais;
+2. extrair e tratar o texto;
+3. segmentar em unidades analiticas (chunks);
+4. estruturar dataset para rotulagem e treinamento;
+5. avaliar modelos de classificacao textual.
+
+## Fonte de dados principal
+
+- Boletins COVISA/SMS-SP (arboviroses): <https://prefeitura.sp.gov.br/web/saude/w/vigilancia_em_saude/boletim_covisa/arboviroses>
+
+Detalhes adicionais em `docs/fontes-dados.md`.
+
+## Estrutura do repositorio
+
 ```text
 .
-├── data/
-│   ├── raw/
-│   ├── interim/
-│   ├── processed/
-│   ├── external/
-│   └── README.md
-├── docs/
-│   ├── escopo-projeto.md
-│   ├── fontes-dados.md
-│   ├── metadados.md
-│   └── cronograma.md
-├── notebooks/
-│   └── README.md
-├── reports/
-│   ├── etapa-1/
-│   ├── etapa-2/
-│   ├── etapa-3/
-│   ├── etapa-4/
-│   └── README.md
-├── references/
-│   └── links-uteis.md
-├── src/
-│   ├── __init__.py
-│   ├── config.py
-│   ├── data_collection.py
-│   ├── preprocessing.py
-│   ├── modeling.py
-│   └── evaluation.py
-└── requirements.txt
+|-- data/
+|   |-- raw/               # insumos originais (PDFs)
+|   |-- interim/           # dados intermediarios
+|   |-- processed/         # texto extraido, chunks, dataset, EDA
+|   |-- external/          # bases externas complementares
+|   `-- README.md
+|-- docs/
+|   |-- escopo-projeto.md
+|   |-- fontes-dados.md
+|   |-- metadados.md
+|   |-- cronograma.md
+|   `-- label_schema.md
+|-- notebooks/
+|   `-- README.md
+|-- reports/
+|   |-- etapa-1/
+|   |-- etapa-2/
+|   |-- etapa-3/
+|   |-- etapa-4/
+|   `-- README.md
+|-- references/
+|   `-- links-uteis.md
+|-- src/
+|   |-- config.py          # paths e convencoes
+|   |-- data_collection.py # importacao de PDFs para data/raw
+|   |-- preprocessing.py   # extracao + limpeza + chunking + EDA
+|   |-- modeling.py        # TF-IDF + treino supervisionado
+|   `-- evaluation.py      # metricas de classificacao
+`-- requirements.txt
 ```
 
-## Integrantes
-- Inserir nome dos integrantes do grupo
+## Fluxo tecnico (etapa 2)
 
-## Status
-- **Etapa 1 concluída.**
+1. Importar PDFs para o projeto (`src/data_collection.py`).
+2. Extrair e limpar texto (`src/preprocessing.py`).
+3. Gerar chunks e dataset consolidado (`data/processed/chunks_dataset.csv`).
+4. Gerar resumo de EDA (`data/processed/eda_summary.md` e `.json`).
+5. Preparar rotulos em `data/processed/labels.csv` para treino supervisionado.
+
+## Como executar
+
+### 1) Ambiente
+
+```bash
+python3 -m venv .venv
+source .venv/bin/activate
+pip install -r requirements.txt
+```
+
+### 2) Importar PDFs para `data/raw/boletins`
+
+```bash
+python3 -m src.data_collection --input-dir "/caminho/para/boletins"
+```
+
+### 3) Preprocessar e gerar artefatos
+
+```bash
+python3 -m src.preprocessing --input-dir "/caminho/para/boletins" --force
+```
+
+### 4) Treinar modelos (apos rotular `labels.csv`)
+
+```bash
+python3 -m src.modeling --labels-csv data/processed/labels.csv
+```
+
+## Entregas academicas
+
+- Etapa 1: definicao de escopo, problema, objetivos e cronograma.
+- Etapa 2: definicao metodologica + pipeline implementado + EDA com dados reais.
+- Etapa 3: treinamento, resultados preliminares e analise de desempenho.
+- Etapa 4: consolidacao final, storytelling e apresentacao.
+
+## Integrantes
+
+- Ana Clara Silva de Souza
+- Cid Wallace Araujo de Oliveira
+- Eduardo Machado Silva
+- Frederico Ripamonte Borges
+
+## Status atual
+
+- Etapa 1: concluida
+- Etapa 2: concluida (documentacao + implementacao)
+- Etapa 3: em preparacao (rotulagem e treino supervisionado)

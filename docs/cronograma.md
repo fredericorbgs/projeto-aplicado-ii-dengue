@@ -1,7 +1,23 @@
 # Cronograma
 
-## Etapas previstas
-1. Etapa 1 — Escopo e organização do projeto (concluída)
-2. Etapa 2 — Coleta e tratamento de dados
-3. Etapa 3 — Modelagem e análise
-4. Etapa 4 — Avaliação final e apresentação
+## Planejamento por etapa
+
+| Etapa | Objetivo principal | Status |
+|---|---|---|
+| 1 | Escopo, problema, metas e estrutura do repositorio | Concluida |
+| 2 | Definicao metodologica, EDA e preprocessamento | Concluida |
+| 3 | Rotulagem, treinamento e avaliacao preliminar | Em andamento |
+| 4 | Consolidacao final, storytelling e apresentacao | Pendente |
+
+## Marco tecnico atual (apos Etapa 2)
+
+- Pipeline de extracao, limpeza e chunking implementado em `src/`.
+- Artefatos de preprocessamento gerados em `data/processed/`.
+- Relatorios em LaTeX/PDF versionados em `reports/`.
+
+## Proximas atividades (Etapa 3)
+
+1. Rotular `data/processed/labels.csv`.
+2. Executar treino supervisionado e gerar `metrics.json`.
+3. Comparar baseline vs modelo principal.
+4. Preparar visualizacoes e discussao dos resultados.
