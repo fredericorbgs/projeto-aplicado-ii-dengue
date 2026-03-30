@@ -1,0 +1,209 @@
+{
+  "input_dir_name": "boletins",
+  "n_docs": 11,
+  "n_chunks": 60,
+  "chunking": {
+    "chunk_size": 500,
+    "stride": 200,
+    "min_fill_ratio": 0.6
+  },
+  "token_stats": {
+    "chunk_token_count": {
+      "mean": 487.6166666666667,
+      "min": 356,
+      "max": 500
+    },
+    "vocab_size_terms": 440
+  },
+  "top_terms": [
+    {
+      "term": "casos",
+      "count": 799
+    },
+    {
+      "term": "sao",
+      "count": 669
+    },
+    {
+      "term": "ate",
+      "count": 600
+    },
+    {
+      "term": "confirmados",
+      "count": 569
+    },
+    {
+      "term": "sinan",
+      "count": 550
+    },
+    {
+      "term": "municipio",
+      "count": 509
+    },
+    {
+      "term": "inicio",
+      "count": 507
+    },
+    {
+      "term": "quadro",
+      "count": 502
+    },
+    {
+      "term": "online",
+      "count": 494
+    },
+    {
+      "term": "ano",
+      "count": 485
+    },
+    {
+      "term": "sintomas",
+      "count": 485
+    },
+    {
+      "term": "entre",
+      "count": 476
+    },
+    {
+      "term": "vila",
+      "count": 461
+    },
+    {
+      "term": "paulo",
+      "count": 436
+    },
+    {
+      "term": "segundo",
+      "count": 432
+    },
+    {
+      "term": "semana",
+      "count": 401
+    },
+    {
+      "term": "cca",
+      "count": 369
+    },
+    {
+      "term": "residentes",
+      "count": 364
+    },
+    {
+      "term": "dados",
+      "count": 349
+    },
+    {
+      "term": "por",
+      "count": 338
+    },
+    {
+      "term": "dengue",
+      "count": 337
+    },
+    {
+      "term": "autoctones",
+      "count": 317
+    },
+    {
+      "term": "fonte",
+      "count": 298
+    },
+    {
+      "term": "provisorios",
+      "count": 298
+    },
+    {
+      "term": "saude",
+      "count": 293
+    },
+    {
+      "term": "notificados",
+      "count": 276
+    },
+    {
+      "term": "chikungunya",
+      "count": 267
+    },
+    {
+      "term": "incidencia",
+      "count": 251
+    },
+    {
+      "term": "transmissao",
+      "count": 236
+    },
+    {
+      "term": "obitos",
+      "count": 220
+    }
+  ],
+  "docs_meta": [
+    {
+      "doc_id": "BoletimArbo_SE01_16jan26",
+      "pdf_filename": "BoletimArbo SE01_16jan26.pdf",
+      "pages": 12,
+      "token_count": 1296
+    },
+    {
+      "doc_id": "BoletimArbo_SE02_23jan26",
+      "pdf_filename": "BoletimArbo SE02_23jan26.pdf",
+      "pages": 12,
+      "token_count": 1211
+    },
+    {
+      "doc_id": "BoletimArbo_SE03_30jan26",
+      "pdf_filename": "BoletimArbo SE03_30jan26.pdf",
+      "pages": 12,
+      "token_count": 1293
+    },
+    {
+      "doc_id": "BoletimArbo_SE04_06fev26",
+      "pdf_filename": "BoletimArbo SE04_06fev26.pdf",
+      "pages": 12,
+      "token_count": 1287
+    },
+    {
+      "doc_id": "BoletimArbo_SE05_13fev26",
+      "pdf_filename": "BoletimArbo SE05_13fev26.pdf",
+      "pages": 12,
+      "token_count": 1378
+    },
+    {
+      "doc_id": "BoletimArbo_SE06_20fev26",
+      "pdf_filename": "BoletimArbo SE06_20fev26.pdf",
+      "pages": 12,
+      "token_count": 1283
+    },
+    {
+      "doc_id": "BoletimArbo_SE07_27fev26",
+      "pdf_filename": "BoletimArbo SE07_27fev26.pdf",
+      "pages": 12,
+      "token_count": 1378
+    },
+    {
+      "doc_id": "BoletimArbo_SE08_06mar26",
+      "pdf_filename": "BoletimArbo SE08_06mar26.pdf",
+      "pages": 12,
+      "token_count": 1284
+    },
+    {
+      "doc_id": "BoletimArbo_SE09_13mar26",
+      "pdf_filename": "BoletimArbo SE09_13mar26.pdf",
+      "pages": 13,
+      "token_count": 1356
+    },
+    {
+      "doc_id": "BoletimArbo_SE10_20mar26",
+      "pdf_filename": "BoletimArbo SE10_20mar26.pdf",
+      "pages": 13,
+      "token_count": 1434
+    },
+    {
+      "doc_id": "BoletimArbo_SE11_urbanas",
+      "pdf_filename": "BoletimArbo SE11_urbanas.pdf",
+      "pages": 13,
+      "token_count": 1357
+    }
+  ],
+  "generated_at": "2026-03-30T20:43:10.743599+00:00"
+}

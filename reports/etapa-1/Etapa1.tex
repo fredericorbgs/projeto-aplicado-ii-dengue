@@ -1,0 +1,356 @@
+\documentclass[12pt,a4paper]{article}
+
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage[brazilian]{babel}
+\usepackage{newtxtext}
+\usepackage{newtxmath}
+\usepackage{geometry}
+\usepackage{setspace}
+\usepackage{array}
+\usepackage{booktabs}
+\usepackage{longtable}
+\usepackage{tabularx}
+\usepackage{xcolor}
+\usepackage{enumitem}
+\usepackage{hyperref}
+\usepackage{titlesec}
+\usepackage{fancyhdr}
+
+\geometry{left=3cm,right=2cm,top=3cm,bottom=2cm}
+\setstretch{1.5}
+\setlength{\parindent}{1.25cm}
+\setlength{\parskip}{0pt}
+\pagestyle{fancy}
+\fancyhf{}
+\fancyhead[R]{\thepage}
+\renewcommand{\headrulewidth}{0pt}
+\setlength{\headheight}{14.5pt}
+\hypersetup{
+    colorlinks=true,
+    linkcolor=black,
+    urlcolor=black,
+    pdftitle={Projeto Aplicado II - Etapa 1},
+    pdfauthor={Grupo de Trabalho},
+    pdfsubject={Apresentacao, objetivos, metas e milestones do projeto}
+}
+
+\definecolor{maincolor}{RGB}{0, 0, 0}
+
+\titleformat{\section}{\large\bfseries\color{maincolor}}{\thesection.}{0.5em}{}
+\titleformat{\subsection}{\normalsize\bfseries\color{maincolor}}{\thesubsection.}{0.5em}{}
+
+\newcolumntype{Y}{>{\raggedright\arraybackslash}X}
+
+\begin{document}
+\hypersetup{pageanchor=false}
+
+\begin{titlepage}
+    \centering
+    {\large Universidade Presbiteriana Mackenzie \par}
+    \vspace{0.4cm}
+    {\large Banco de Dados – Projeto Aplicado II \par}
+    \vspace{2.0cm}
+    {\Large \textbf{Etapa 1} \par}
+    \vspace{0.4cm}
+    {\large \textbf{Apresentação, Objetivos, Metas e Milestones do Projeto} \par}
+    \vspace{1.4cm}
+    {\Large \textbf{Classificação e Monitoramento Textual de Boletins Epidemiológicos sobre Dengue no Brasil} \par}
+    \vfill
+
+    \begin{flushleft}
+    \textbf{Grupo:} Ana Clara Silva de Souza; Cid Wallace Araujo de Oliveira; Eduardo Machado Silva; Frederico Ripamonte Borges \\
+    \textbf{Disciplina:} Projeto Aplicado II \\
+    \textbf{Professor:} Anderson Adaime de Borba \\
+    \textbf{Semestre:} 2026.01
+    \end{flushleft}
+
+    \vfill
+    {\large \today \par}
+\end{titlepage}
+
+\clearpage
+\hypersetup{pageanchor=true}
+\setcounter{page}{1}
+
+\section*{Resumo Executivo}
+
+Este documento apresenta a proposta inicial do projeto da disciplina \textit{Projeto Aplicado II}, cujo foco é a aplicação de técnicas de ciência de dados e análise textual sobre documentos públicos relacionados à dengue no Brasil. O projeto utilizará como principal fonte institucional o Ministério da Saúde, a partir de boletins epidemiológicos, informes técnicos, comunicados oficiais e demais documentos textuais disponibilizados em repositórios públicos governamentais.
+
+A proposta parte de um problema prático: há grande volume de informação textual relevante sobre dengue, mas sua leitura, organização e interpretação manual são lentas, dispersas e pouco escaláveis. Nesse contexto, o projeto pretende estruturar uma base textual com metadados padronizados e preparar o caminho para o desenvolvimento de um produto analítico capaz de classificar e organizar automaticamente conteúdos temáticos relevantes ao monitoramento em saúde pública.
+
+A presente entrega contempla os itens exigidos na Etapa 1: definição do grupo de trabalho, premissas do projeto, definição da organização escolhida, área de atuação, apresentação dos dados que serão utilizados, objetivos, metas, milestones e cronograma estimado de execução.
+
+\clearpage
+\section{Grupo de Trabalho}
+
+O projeto será desenvolvido em grupo, conforme exigência da disciplina. A composição final deve conter de três a quatro integrantes.
+
+\subsection{Integrantes}
+
+\begin{itemize}[leftmargin=1.2cm]
+    \item Ana Clara Silva de Souza
+    \item Cid Wallace Araujo de Oliveira
+    \item Eduardo Machado Silva
+    \item Frederico Ripamonte Borges
+\end{itemize}
+
+\subsection{Divisão inicial de responsabilidades}
+
+Para favorecer a execução colaborativa e a organização do projeto, propõe-se a seguinte divisão inicial de responsabilidades, sem prejuízo de atuação conjunta em todas as etapas:
+
+\begin{itemize}[leftmargin=1.2cm]
+    \item \textbf{Coordenação e documentação:} organização do cronograma, consolidação das entregas e redação dos relatórios técnicos;
+    \item \textbf{Coleta e estruturação de dados:} levantamento das fontes oficiais, captura dos documentos e organização da base textual;
+    \item \textbf{Tratamento e análise de dados:} preparação textual, modelagem e avaliação analítica nas etapas posteriores;
+    \item \textbf{Visualização e apresentação:} elaboração de tabelas, gráficos, storytelling e apresentação final.
+\end{itemize}
+
+Essa divisão tem caráter operacional e poderá ser ajustada ao longo do semestre, de acordo com a evolução do projeto e a disponibilidade do grupo.
+
+\clearpage
+\section{Premissas do Projeto}
+
+\subsection{Tema do Projeto}
+
+O tema definido pelo grupo é a \textbf{análise textual de documentos epidemiológicos sobre dengue no Brasil}, com foco em organização, classificação temática e extração de informações úteis ao monitoramento em saúde pública.
+
+\subsection{Organização Escolhida}
+
+A organização escolhida como referência institucional do projeto é o \textbf{Ministério da Saúde do Brasil}, por meio de suas bases públicas e documentos oficiais relacionados ao acompanhamento da dengue no país.
+
+A escolha dessa organização se justifica por quatro fatores principais. Em primeiro lugar, trata-se de uma fonte pública, oficial e relevante socialmente. Em segundo, o Ministério da Saúde disponibiliza documentos textuais com alto valor informacional, adequados à proposta da disciplina, que exige manipulação de texto ou imagem. Em terceiro, o tema apresenta forte aderência a aplicações reais de ciência de dados em saúde pública. Por fim, a utilização de dados governamentais aumenta a transparência metodológica e a reprodutibilidade do trabalho.
+
+\subsection{Área de Atuação}
+
+A área de atuação do projeto é definida como:
+
+\begin{quote}
+\textbf{Aplicação de técnicas de ciência de dados e análise textual em documentos epidemiológicos sobre dengue, com foco na organização, classificação e extração de informações úteis ao monitoramento em saúde pública.}
+\end{quote}
+
+Essa definição delimita com clareza o escopo do trabalho: o projeto não buscará apenas descrever documentos, mas estruturar uma base textual capaz de sustentar análises posteriores e a construção de um produto analítico.
+
+\subsection{Problema de Interesse}
+
+A dengue é uma arbovirose de grande relevância no Brasil, acompanhada por múltiplos documentos institucionais que incluem alertas epidemiológicos, orientações técnicas, informações clínicas, ações preventivas e dados consolidados. Apesar da abundância de material oficial, o acesso rápido às informações mais relevantes pode ser dificultado pela dispersão dos conteúdos, pela heterogeneidade dos formatos e pelo volume documental acumulado ao longo do tempo.
+
+Diante disso, o problema central do projeto pode ser resumido da seguinte forma:
+
+\begin{quote}
+\textit{Como organizar e analisar documentos públicos sobre dengue de maneira padronizada, de modo a facilitar a identificação de temas, padrões e informações relevantes para monitoramento em saúde pública?}
+\end{quote}
+
+\subsection{Proposta de Solução}
+
+A proposta do grupo é construir, inicialmente, uma base textual estruturada a partir de documentos oficiais sobre dengue. Em etapas posteriores, essa base servirá de insumo para o desenvolvimento de um produto analítico de classificação textual, capaz de categorizar automaticamente conteúdos segundo temas de interesse, tais como cenário epidemiológico, prevenção, orientações clínicas, campanhas ou recomendações operacionais.
+
+Assim, já na Etapa 1, o projeto é concebido de forma integrada e progressiva: a definição da fonte, dos dados, dos objetivos e do cronograma foi feita considerando a viabilidade das entregas futuras.
+
+\clearpage
+\section{Apresentação dos Dados que Serão Utilizados}
+
+\subsection{Natureza dos Dados}
+
+A base principal do projeto será composta por \textbf{dados textuais}, extraídos de documentos públicos oficiais relacionados à dengue. Entre os tipos de documentos que poderão compor o corpus, destacam-se:
+
+\begin{itemize}[leftmargin=1.2cm]
+    \item boletins epidemiológicos;
+    \item informes técnicos;
+    \item notas e comunicados oficiais;
+    \item páginas institucionais informativas;
+    \item documentos textuais complementares publicados em portais governamentais de saúde.
+\end{itemize}
+
+O corpus será constituído prioritariamente por materiais vinculados ao Ministério da Saúde e, quando pertinente, por conteúdos oficiais correlatos que mantenham aderência ao escopo do projeto.
+
+\subsection{Unidade de Análise}
+
+Para esta etapa inicial, a unidade documental primária será o \textbf{documento oficial} como um todo. Contudo, tendo em vista as etapas posteriores do projeto, prevê-se também a segmentação dos documentos em \textbf{trechos, seções ou parágrafos}, quando isso for necessário para treinamento e avaliação de métodos analíticos.
+
+Essa decisão é estratégica, pois amplia a flexibilidade do projeto: permite iniciar com uma base documental consistente e, ao mesmo tempo, preparar o material para tarefas futuras de classificação textual.
+
+\subsection{Estrutura Proposta dos Metadados}
+
+Com o objetivo de garantir organização, rastreabilidade e reprodutibilidade, cada documento deverá ser registrado com um conjunto padronizado de metadados.
+
+\begin{center}
+\renewcommand{\arraystretch}{1.25}
+\begin{tabularx}{\textwidth}{>{\bfseries}p{4.5cm} Y}
+\toprule
+Campo & Descrição \\
+\midrule
+ID do documento & Identificador único para controle interno da base \\
+Título & Nome oficial do documento \\
+Data de publicação & Data em que o documento foi disponibilizado \\
+Órgão responsável & Instituição responsável pela publicação \\
+Tipo de documento & Boletim, informe técnico, comunicado, página institucional etc. \\
+Tema principal & Assunto predominante do documento \\
+Período de referência & Intervalo temporal abordado no conteúdo, quando houver \\
+Escopo geográfico & Brasil, região, estado ou outro recorte indicado no documento \\
+Fonte / URL & Endereço eletrônico da publicação original \\
+Texto bruto & Conteúdo extraído originalmente \\
+Texto tratado & Conteúdo após limpeza e padronização \\
+Palavras-chave & Termos relevantes identificados no documento \\
+Observações & Informações adicionais úteis para análise \\
+\bottomrule
+\end{tabularx}
+\end{center}
+
+\subsection{Exemplo de Uso dos Metadados}
+
+Os metadados terão papel central na organização e no uso analítico da base. Eles permitirão:
+
+\begin{itemize}[leftmargin=1.2cm]
+    \item localizar rapidamente documentos por tema, período ou fonte;
+    \item padronizar a estrutura do corpus textual;
+    \item facilitar a preparação dos dados para as etapas de tratamento e modelagem;
+    \item garantir rastreabilidade entre o conteúdo analisado e sua fonte original;
+    \item apoiar visualizações e análises descritivas sobre a composição da base.
+\end{itemize}
+
+\subsection{Justificativa para a Escolha dos Dados}
+
+A escolha dos dados textuais oficiais é adequada à proposta do projeto por três razões principais. Primeiro, os documentos apresentam relevância pública e aderência temática. Segundo, o material textual permite aplicar técnicas de preparação de dados e aprendizado de máquina vistas ao longo do semestre. Terceiro, trata-se de uma base com potencial real de transformação em produto analítico, o que fortalece a coerência entre as quatro etapas do projeto.
+
+\clearpage
+\section{Objetivos do Projeto}
+
+\subsection{Objetivo Geral}
+
+Desenvolver uma base textual estruturada e um protótipo de análise/classificação de documentos epidemiológicos sobre dengue no Brasil, utilizando dados públicos oficiais para organizar, extrair e interpretar informações relevantes ao monitoramento em saúde pública.
+
+\subsection{Objetivos Específicos}
+
+\begin{enumerate}[leftmargin=1.2cm]
+    \item Levantar e selecionar documentos públicos oficiais relacionados à dengue;
+    \item Organizar os documentos em uma base padronizada com metadados;
+    \item Realizar a limpeza e a preparação textual da base;
+    \item Definir categorias temáticas adequadas ao corpus;
+    \item Aplicar métodos analíticos de classificação textual em etapas posteriores;
+    \item Avaliar o desempenho analítico por métricas de acurácia;
+    \item Consolidar os resultados em visualizações, relatório técnico e apresentação final.
+\end{enumerate}
+
+\clearpage
+\section{Metas do Projeto}
+
+As metas a seguir foram definidas de forma realista e progressiva, buscando alinhar qualidade técnica, viabilidade de execução e aderência aos requisitos da disciplina.
+
+\begin{enumerate}[leftmargin=1.2cm]
+    \item Estruturar um repositório colaborativo no GitHub para versionamento do projeto;
+    \item Coletar e catalogar uma base inicial de documentos oficiais sobre dengue;
+    \item Definir um padrão mínimo de metadados para todo o corpus;
+    \item Preparar a base textual para análise exploratória e treinamento;
+    \item Comparar, ao menos, dois métodos analíticos aplicáveis ao problema proposto;
+    \item Apresentar um produto analítico preliminar na Etapa 3;
+    \item Entregar, ao final, relatório técnico, storytelling, repositório completo e apresentação gravada.
+\end{enumerate}
+
+\subsection{Metas Mensuráveis}
+
+Para aumentar a objetividade do acompanhamento, o grupo estabelece as seguintes metas mensuráveis iniciais:
+
+\begin{itemize}[leftmargin=1.2cm]
+    \item catalogar ao menos 30 documentos textuais oficiais na base inicial;
+    \item adotar no mínimo 10 campos padronizados de metadados;
+    \item estruturar pelo menos 1 base consolidada em formato tabular para análise;
+    \item testar pelo menos 2 abordagens analíticas na etapa de modelagem;
+    \item produzir pelo menos 1 visualização analítica e 1 protótipo demonstrável antes da entrega final.
+\end{itemize}
+
+Esses números poderão ser ajustados conforme disponibilidade e qualidade das fontes, sem alteração da lógica central do projeto.
+
+\clearpage
+\section{Milestones do Projeto}
+
+Os principais \textit{milestones} definidos pelo grupo são os seguintes:
+
+\begin{center}
+\renewcommand{\arraystretch}{1.25}
+\begin{tabularx}{\textwidth}{>{\bfseries}p{3.0cm} Y}
+\toprule
+Milestone & Descrição \\
+\midrule
+M1 & Tema, organização escolhida, objetivos, metas e cronograma definidos \\
+M2 & Base inicial de documentos coletada e repositório colaborativo ativo \\
+M3 & Metadados estruturados e corpus textual preparado para exploração \\
+M4 & Método analítico escolhido e base pronta para treinamento \\
+M5 & Resultados preliminares consolidados, com métricas e produto inicial \\
+M6 & Relatório final, storytelling, GitHub completo e vídeo de apresentação entregues \\
+\bottomrule
+\end{tabularx}
+\end{center}
+
+\clearpage
+\section{Cronograma de Atividades}
+
+O cronograma abaixo foi construído considerando as quatro etapas formais da disciplina e as datas previstas de entrega.
+
+{\small
+\setstretch{1.15}
+\begin{center}
+\renewcommand{\arraystretch}{1.08}
+\begin{tabularx}{\textwidth}{>{\bfseries}p{1.6cm} >{\raggedright\arraybackslash}p{2.5cm} Y Y}
+\toprule
+Etapa & Período estimado & Atividades principais & Entrega prevista \\
+\midrule
+Etapa 1 & 16/03/2026 & Definição do grupo, organização, problema, dados, objetivos, metas, milestones e cronograma & Relatório técnico inicial \\
+\addlinespace
+Etapa 2 & 30/03/2026 & Implantação do GitHub, definição de bibliotecas, análise exploratória, tratamento dos dados e definição do método analítico e da acurácia & Relatório técnico da definição do produto analítico \\
+\addlinespace
+Etapa 3 & 27/04/2026 & Aplicação do método analítico, consolidação dos resultados, cálculo das métricas, apresentação do produto e esboço do storytelling & Relatório técnico com resultados preliminares e storytelling inicial \\
+\addlinespace
+Etapa 4 & 25/05/2026 & Consolidação final, refinamento do storytelling, organização do GitHub, preparação da apresentação e gravação do vídeo & Relatório técnico final, apresentação, GitHub e vídeo \\
+\bottomrule
+\end{tabularx}
+\end{center}
+
+\subsection{Plano Operacional Resumido}
+
+Além da divisão por etapas, o grupo adotará um fluxo contínuo de trabalho:
+
+\begin{itemize}[leftmargin=1.2cm,itemsep=0.2em]
+    \item reuniões periódicas para acompanhamento das atividades;
+    \item versionamento de código e documentos no GitHub;
+    \item validação interna de cada entrega antes da submissão;
+    \item registro de decisões metodológicas ao longo do semestre.
+\end{itemize}
+}
+
+\clearpage
+\section{Link do GitHub do Projeto}
+
+O repositório do projeto será utilizado como ambiente central de colaboração, versionamento e organização dos arquivos produzidos pelo grupo.
+
+\textbf{Link do GitHub:}\\
+\url{https://github.com/fredericorbgs/projeto-aplicado-ii-dengue}
+
+\subsection{Estrutura inicial sugerida do repositório}
+
+\begin{itemize}[leftmargin=1.2cm]
+    \item \texttt{README.md}
+    \item \texttt{data/}
+    \item \texttt{notebooks/}
+    \item \texttt{src/}
+    \item \texttt{docs/}
+    \item \texttt{reports/}
+\end{itemize}
+
+Essa organização facilitará tanto a execução colaborativa quanto a rastreabilidade das entregas técnicas ao longo do semestre.
+
+\clearpage
+\section{Considerações Finais}
+
+A proposta apresentada nesta Etapa 1 foi estruturada para atender de forma completa aos requisitos da disciplina e, ao mesmo tempo, estabelecer uma base sólida para as próximas entregas. A escolha do Ministério da Saúde como fonte institucional, aliada ao uso de documentos textuais oficiais sobre dengue, fornece ao projeto relevância pública, coerência metodológica e viabilidade técnica.
+
+Além de cumprir os requisitos imediatos da etapa inicial, o projeto já nasce com uma direção analítica clara: transformar um conjunto disperso de documentos em uma base padronizada, explorável e apta a sustentar técnicas de classificação textual e geração de insights. Dessa forma, o grupo pretende conduzir o trabalho com consistência entre planejamento, execução técnica e comunicação dos resultados.
+
+\vspace{1cm}
+
+% --------------------------------------------------------------------
+% Somatoria: inclui a Etapa 2 (A2) ao final do documento da Etapa 1.
+\clearpage
+\input{../etapa-2/Etapa2_A2_metodologia_body.tex}
+
+\end{document}

@@ -1,0 +1,440 @@
+\documentclass[12pt,a4paper]{article}
+
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage[brazilian]{babel}
+\usepackage{newtxtext}
+\usepackage{newtxmath}
+\usepackage{geometry}
+\usepackage{setspace}
+\usepackage{array}
+\usepackage{booktabs}
+\usepackage{longtable}
+\usepackage{tabularx}
+\usepackage{xcolor}
+\usepackage{enumitem}
+\usepackage{hyperref}
+\usepackage{xurl}
+\usepackage{titlesec}
+\usepackage{fancyhdr}
+\usepackage{amsmath}
+
+\geometry{left=3cm,right=2cm,top=3cm,bottom=2cm}
+\setstretch{1.5}
+\setlength{\parindent}{1.25cm}
+\setlength{\parskip}{0pt}
+\pagestyle{fancy}
+\fancyhf{}
+\fancyhead[R]{\thepage}
+\renewcommand{\headrulewidth}{0pt}
+\setlength{\headheight}{14.5pt}
+\hypersetup{
+    colorlinks=true,
+    linkcolor=black,
+    urlcolor=black,
+    pdftitle={Projeto Aplicado II - Etapa 2},
+    pdfauthor={Grupo de Trabalho},
+    pdfsubject={Definição do método analítico},
+}
+
+\definecolor{maincolor}{RGB}{0, 0, 0}
+
+\titleformat{\section}{\large\bfseries\color{maincolor}}{\thesection.}{0.5em}{}
+\titleformat{\subsection}{\normalsize\bfseries\color{maincolor}}{\thesubsection.}{0.5em}{}
+
+\newcolumntype{Y}{>{\raggedright\arraybackslash}X}
+
+\begin{document}
+\hypersetup{pageanchor=false}
+
+\begin{titlepage}
+    \centering
+    {\large Universidade Presbiteriana Mackenzie \par}
+    \vspace{0.4cm}
+    {\large Banco de Dados – Projeto Aplicado II \par}
+    \vspace{2.0cm}
+    {\Large \textbf{Etapa 2} \par}
+    \vspace{0.4cm}
+    {\large \textbf{Definição do Método Analítico} \par}
+    \vspace{1.4cm}
+    {\Large \textbf{Classificação e Monitoramento Textual de Boletins Epidemiológicos sobre Dengue no Brasil} \par}
+    \vfill
+
+    \begin{flushleft}
+    \textbf{Grupo:} Ana Clara Silva de Souza; Cid Wallace Araujo de Oliveira; Eduardo Machado Silva; Frederico Ripamonte Borges \\
+    \textbf{Disciplina:} Projeto Aplicado II \\
+    \textbf{Professor:} Anderson Adaime de Borba \\
+    \textbf{Semestre:} 2026.01
+    \end{flushleft}
+
+    \vfill
+    {\large \today \par}
+\end{titlepage}
+
+\clearpage
+\hypersetup{pageanchor=true}
+\setcounter{page}{1}
+
+\section*{Resumo Executivo}
+
+Esta segunda etapa do projeto apresenta a definição do método analítico que será utilizado para a classificação textual supervisionada de boletins epidemiológicos relacionados a arboviroses no Brasil. Em coerência com a proposta da Etapa 1, a pesquisa baseia-se no uso de técnicas de processamento de linguagem natural para estruturar uma base analítica e treinar modelos com representações numéricas dos textos.
+
+Nesta entrega, o grupo define a linguagem de programação empregada (Python), detalha como a base foi analisada exploratoriamente (EDA), descreve o tratamento previsto para extração, limpeza, tokenização e segmentação (chunking) para preparação do conjunto de treino e avaliação. Adicionalmente, são apresentadas as bases teóricas dos métodos utilizados (TF-IDF, Naive Bayes Multinomial e Regressão Logística multiclasse) e a forma de cálculo da métrica principal de avaliação (acurácia), incluindo complementos para leitura em cenários multiclasse.
+
+% --------------------------------------------------------------------
+\clearpage
+\section{Definição da Linguagem de Programação}
+
+\subsection{Linguagem Escolhida}
+
+A linguagem de programação escolhida para o desenvolvimento do projeto é o \textbf{Python}.
+
+\subsection{Justificativa da Escolha}
+
+A decisão por Python se justifica por sua adequação ao escopo do projeto, que envolve manipulação de dados e processamento de texto. Em termos práticos, Python permite:
+
+\begin{enumerate}[leftmargin=1.2cm]
+    \item Construir um pipeline reprodutível com leitura/escrita de artefatos (por exemplo: PDFs, textos extraídos, chunks e CSVs consolidados).
+    \item Aplicar rotinas de extração textual a partir de PDFs, quando necessário, por meio de bibliotecas específicas.
+    \item Representar e transformar textos em vetores numéricos por meio de \textit{TF-IDF} e treinar classificadores supervisionados com \texttt{scikit-learn}.
+    \item Avaliar modelos com métricas adequadas para classificação multiclasse, como acurácia e métricas complementares (precision, recall, F1 e matriz de confusão).
+    \item Organizar a implementação em módulos claros (extração, pré-processamento, modelagem e avaliação), facilitando a colaboração do grupo e a rastreabilidade das decisões.
+\end{enumerate}
+
+\subsection{Bibliotecas Previstas}
+
+As bibliotecas usadas/previstas no desenvolvimento do pipeline incluem:
+
+\begin{table}[htbp]
+\centering
+\renewcommand{\arraystretch}{1.25}
+\begin{tabularx}{\textwidth}{>{\bfseries}p{4.4cm} Y}
+\toprule
+Biblioteca & Finalidade no projeto \\
+\midrule
+\texttt{pandas} & Organização tabular da base, leitura de CSVs e estruturação de metadados \\
+\texttt{numpy} & Operações numéricas auxiliares \\
+\texttt{matplotlib} e \texttt{seaborn} & Visualizações para EDA \\
+\texttt{scikit-learn} & TF-IDF, modelos (Naive Bayes, Regressão Logística) e avaliação \\
+\texttt{requests} & Coleta automatizada (etapa de coleta, quando aplicável) \\
+\texttt{pdfplumber} & Extração de texto de PDFs \\
+\bottomrule
+\end{tabularx}
+\caption{Bibliotecas utilizadas/previstas para o projeto}
+\label{tab:bibliotecas}
+\end{table}
+
+% --------------------------------------------------------------------
+\clearpage
+\section{Análise Exploratória da Base de Dados}
+
+\subsection{Base Escolhida}
+
+A base principal do projeto é composta por boletins epidemiológicos em \textbf{PDF} relacionados a arboviroses urbanas (incluindo Dengue, Zika e Chikungunya). Para esta etapa, os boletins utilizados foram extraídos do seguinte endereço oficial:
+
+\vspace{0.2cm}
+\noindent
+\textbf{Fonte oficial dos boletins (COVISA/SMS-SP):} \\
+\url{https://prefeitura.sp.gov.br/web/saude/w/vigilancia_em_saude/boletim_covisa/arboviroses}
+
+\vspace{0.2cm}
+\noindent
+Observação do próprio site: recomenda-se utilizar o \textit{último boletim publicado}, e boletins anteriores devem ser entendidos como uma fotografia do momento em que foram publicados (não é recomendada comparação direta entre anos diferentes com o boletim vigente).
+
+\subsection{Objetivo da Análise Exploratória}
+
+A análise exploratória tem como objetivo compreender a estrutura do corpus textual, identificar padrões relevantes para modelagem e orientar a preparação dos dados (limpeza, tokenização e segmentação). Além da descrição, a EDA serve para verificar:
+
+\begin{enumerate}[leftmargin=1.2cm]
+    \item Quantidade de documentos disponíveis e distribuição de tamanho.
+    \item Distribuição de vocabulário e termos predominantes.
+    \item Necessidade de segmentação do texto (evitar mistura temática em uma única amostra).
+    \item Presença de ruídos típicos da extração de PDFs e como mitigá-los.
+    \item Parâmetros de chunking adequados para viabilizar treino e avaliação supervisionada.
+\end{enumerate}
+
+\subsection{Unidade de Análise}
+
+A unidade de análise primária é o documento (boletim completo). Entretanto, para aumentar a capacidade do modelo em capturar temas locais e reduzir mistura temática, a etapa prevê a segmentação do texto em \textbf{chunks} (trechos) a partir de janelas de tokens.
+
+\subsection{Resultados Reais da EDA (base processada)}
+
+Com os boletins disponíveis, foram observados os seguintes resultados após extração, limpeza e preparação do texto (conforme artefatos em \texttt{data/processed/}):
+
+\begin{itemize}[leftmargin=1.2cm]
+    \item \textbf{Quantidade de PDFs:} 11
+    \item \textbf{Chunks gerados:} 60
+    \item \textbf{Parâmetros de chunking:} \texttt{chunk\_size=500}, \texttt{stride=200}, \texttt{min\_fill\_ratio=0.6}
+    \item \textbf{Tokens por chunk:} média 487.62, mínimo 356, máximo 500
+    \item \textbf{Vocabulário (termos únicos após filtragem):} 440
+\end{itemize}
+
+\subsubsection{Termos predominantes}
+
+Os termos mais frequentes do corpus, após filtragem (remoção de números puros e tokens muito curtos), reforçam que o conteúdo é dominado por vocabulário epidemiológico e pela estrutura recorrente dos boletins:
+
+\begin{table}[htbp]
+\centering
+\renewcommand{\arraystretch}{1.15}
+\begin{tabularx}{\textwidth}{>{\bfseries}l Y}
+\toprule
+Termo & Ocorrências \\
+\midrule
+casos & 799 \\
+sao & 669 \\
+ate & 600 \\
+confirmados & 569 \\
+sinan & 550 \\
+municipio & 509 \\
+inicio & 507 \\
+quadro & 502 \\
+online & 494 \\
+ano & 485 \\
+sintomas & 485 \\
+entre & 476 \\
+vila & 461 \\
+paulo & 436 \\
+segundo & 432 \\
+\bottomrule
+\end{tabularx}
+\caption{Top termos mais frequentes (EDA)}
+\label{tab:toptermos}
+\end{table}
+
+\subsubsection{Implicações para a modelagem}
+
+Com base na EDA, o grupo identifica as seguintes implicações práticas:
+
+\begin{enumerate}[leftmargin=1.2cm]
+    \item A recorrência de termos sugere que a representação por \textbf{TF-IDF} é adequada para capturar termos discriminantes entre categorias.
+    \item A presença de conteúdo relacionado a mais de uma arbovirose no mesmo boletim aumenta a chance de mistura temática; por isso, a segmentação em chunks favorece a qualidade das amostras.
+    \item A similaridade entre boletins (formatos e seções recorrentes) motiva uma estratégia de rotulagem por trechos, não apenas por documento inteiro.
+\end{enumerate}
+
+\subsubsection{Ruído da extração e limpeza aplicada}
+
+Como PDFs podem introduzir artefatos na extração textual, foram adotadas rotinas de limpeza antes do chunking:
+
+\begin{itemize}[leftmargin=1.2cm]
+    \item União de hifens de quebra de linha (ex.: transmissao-\textbackslash ncontinua $\rightarrow$ transmissaocontinua).
+    \item Remoção de linhas que se tornam apenas números (ex.: numeração de páginas/rodapés).
+    \item Normalização de \textit{whitespace} (remoção de múltiplos espaços e excesso de quebras de linha).
+    \item Normalização de acentos para ASCII (portabilidade dos artefatos no repositório).
+    \item Tokenização por \textit{regex} e filtragem (remoção de números puros e tokens com menos de 3 caracteres).
+\end{itemize}
+
+% --------------------------------------------------------------------
+\clearpage
+\section{Tratamento da Base de Dados}
+
+\subsection{Visão Geral do Pipeline}
+
+O tratamento da base de dados compreende um pipeline composto por:
+
+\begin{enumerate}[leftmargin=1.2cm]
+    \item Coleta/importação dos PDFs para a estrutura do repositório.
+    \item Extração textual a partir dos PDFs.
+    \item Limpeza e normalização do texto.
+    \item Tokenização e filtragem para compatibilidade com TF-IDF.
+    \item Segmentação (chunking) em janelas de tokens.
+    \item Criação de um dataset consolidado (CSV) para modelagem.
+    \item Rotulagem supervisionada (quando as categorias forem definidas pelo grupo).
+    \item Vetorização e treino dos modelos.
+    \item Avaliação das predições no conjunto de teste.
+\end{enumerate}
+
+\subsection{Preparação (extração, limpeza, tokenização e chunking)}
+
+O processo foi implementado no módulo \texttt{src/preprocessing.py} e gera os seguintes artefatos:
+
+\begin{itemize}[leftmargin=1.2cm]
+    \item \texttt{data/processed/extracted\_text/}: texto limpo por documento (\texttt{.md}).
+    \item \texttt{data/processed/chunks/}: texto por chunk (\texttt{.md}).
+    \item \texttt{data/processed/chunks\_dataset.csv}: dataset consolidado para modelagem.
+    \item \texttt{data/processed/eda\_summary.*}: resumo estatístico da EDA (tokens, vocabulário e top termos).
+\end{itemize}
+
+\subsubsection{Chunking e identificação de amostras}
+
+Cada chunk recebe um identificador no formato:
+
+\[
+ \text{chunk\_id} = \text{doc\_id}\_\text{chunk\_index}
+ \]
+
+Com:
+\begin{itemize}[leftmargin=1.2cm]
+    \item \texttt{doc\_id}: derivado do nome do arquivo PDF (sem extensão).
+    \item \texttt{chunk\_index}: índice sequencial do chunk dentro do documento.
+\end{itemize}
+
+\subsubsection{Dataset final para modelagem}
+
+O arquivo \texttt{data/processed/chunks\_dataset.csv} contém (no mínimo) as colunas:
+
+\begin{itemize}[leftmargin=1.2cm]
+    \item \texttt{chunk\_id}
+    \item \texttt{doc\_id}
+    \item \texttt{chunk\_index}
+    \item \texttt{token\_count}
+    \item \texttt{chunk\_text}
+    \item \texttt{text\_md\_path}
+\end{itemize}
+
+\subsection{Rotulagem supervisionada (labels)}
+
+Para que o treino supervisionado ocorra, será necessário criar:
+
+\begin{itemize}[leftmargin=1.2cm]
+    \item \texttt{data/processed/labels.csv} com colunas:
+    \begin{itemize}
+        \item \texttt{chunk\_id}
+        \item \texttt{label}
+    \end{itemize}
+\end{itemize}
+
+Como sugestão inicial de categorias (para rotulagem), o grupo utiliza:
+
+\begin{enumerate}[leftmargin=1.2cm]
+    \item cenario\_epidemiologico
+    \item prevencao\_controle\_vetorial
+    \item orientacoes\_clinicas\_sintomas
+    \item politicas\_publicas\_campanhas
+    \item recomendacoes\_operacionais
+\end{enumerate}
+
+\noindent
+Atribuição por chunk: o grupo deve rotular cada chunk com a categoria que predomina no conteúdo textual do trecho (uma classe por chunk).
+
+\subsection{Vetorização e Treinamento}
+
+Com o dataset rotulado, os textos serão representados numericamente por TF-IDF e treinados em dois classificadores:
+
+\begin{enumerate}[leftmargin=1.2cm]
+    \item \textbf{Baseline (referência inicial)}: \texttt{MultinomialNB} (\textit{Naive Bayes Multinomial}).
+    \item \textbf{Modelo principal}: \texttt{LogisticRegression} em modo multiclasse (\textit{multinomial}) para classificação discriminativa.
+\end{enumerate}
+
+\subsubsection{Parâmetros de TF-IDF}
+
+O \texttt{TfidfVectorizer} utiliza:
+
+\begin{itemize}[leftmargin=1.2cm]
+    \item \texttt{ngram\_range=(1,2)} (unigramas e bigramas)
+    \item \texttt{min\_df=2} e \texttt{max\_df=0.95}
+    \item \texttt{max\_features=20000}
+    \item \texttt{stop\_words=None} (mantém termos do domínio)
+\end{itemize}
+
+\subsubsection{Divisão de dados (treino/validação/teste)}
+
+Quando labels estiverem disponíveis, a divisão será estratificada por classe:
+
+\begin{itemize}[leftmargin=1.2cm]
+    \item 70\% treino
+    \item 15\% validação
+    \item 15\% teste final
+\end{itemize}
+
+A validação interna pode apoiar ajustes/seleção de parâmetros. O teste final é reservado para avaliação objetiva.
+
+% --------------------------------------------------------------------
+\clearpage
+\section{Definição e Descrição das Bases Teóricas dos Métodos}
+
+\subsection{Aprendizado Supervisionado para Classificação Textual}
+
+O problema será formulado como uma tarefa de \textbf{classificação supervisionada}: os textos vetorizados são associados a rótulos (categorias temáticas previamente atribuídas). O objetivo é aprender padrões que permitam generalizar a classificação para novos textos.
+
+\subsection{Base Teórica da Representação TF-IDF}
+
+A técnica TF-IDF atribui peso maior a termos que aparecem com frequência no documento, mas que não são excessivamente comuns no corpus. Formalmente:
+
+\[
+\operatorname{TF\mbox{-}IDF}(t,d) = \operatorname{tf}(t,d)\cdot \log\left(\frac{N}{\operatorname{df}(t)}\right)
+\]
+
+em que:
+\begin{itemize}[leftmargin=1.2cm]
+    \item $N$ é o número total de documentos no corpus;
+    \item $\operatorname{df}(t)$ é o número de documentos em que o termo $t$ aparece;
+    \item $\operatorname{tf}(t,d)$ é a frequência do termo $t$ no documento $d$.
+\end{itemize}
+
+\subsection{Modelo 1: Naive Bayes Multinomial}
+
+O \textit{Naive Bayes Multinomial} é um classificador probabilístico baseado na probabilidade de uma classe dado o conjunto de palavras observadas no texto. Sua decisão é expressa como:
+
+\[
+\hat{c} = \arg\max_{c \in C} P(c)\prod_{i=1}^{n}P(w_i \mid c)
+\]
+
+Sua hipótese simplificadora assume independência condicional entre termos dada a classe.
+
+\subsection{Modelo 2: Regressão Logística Multiclasse}
+
+A \textit{Regressão Logística Multiclasse} estima probabilidades por classe. Com função softmax:
+
+\[
+P(y = k \mid x) = \frac{e^{\beta_k^\top x}}{\sum_{j=1}^{K} e^{\beta_j^\top x}}
+\]
+
+em que:
+\begin{itemize}[leftmargin=1.2cm]
+    \item $x$ representa o vetor de características do texto (TF-IDF);
+    \item $\beta_k$ é o vetor de coeficientes para a classe $k$;
+    \item $K$ é o número de classes.
+\end{itemize}
+
+\subsection{Estratégia Analítica Adotada}
+
+O grupo utiliza o \textit{Naive Bayes Multinomial} como modelo de referência e a \textit{Regressão Logística Multiclasse} como modelo principal para comparação. Essa estratégia permite:
+
+\begin{enumerate}[leftmargin=1.2cm]
+    \item comparar um modelo probabilístico simples com um modelo linear discriminativo;
+    \item obter desempenho com interpretabilidade relativamente acessível via coeficientes dos termos em TF-IDF;
+    \item manter o projeto em complexidade executável no contexto acadêmico.
+\end{enumerate}
+
+% --------------------------------------------------------------------
+\clearpage
+\section{Definição e Descrição de Como Será Calculada a Acurácia}
+
+\subsection{Métrica Principal}
+
+A métrica principal de avaliação será a \textbf{acurácia}, definida como a proporção de previsões corretas em relação ao total de previsões:
+
+\[
+\text{Acurácia} = \frac{\text{número de classificações corretas}}{\text{número total de classificações}}
+\]
+
+Essa métrica será calculada no conjunto de teste (com rótulos reais) após o treino e a seleção usando apenas a estratégia de validação, evitando vazamento de informação.
+
+\subsection{Métricas Complementares}
+
+Além da acurácia, o grupo calculará métricas complementares para classificação multiclasse:
+\begin{itemize}[leftmargin=1.2cm]
+    \item \textbf{Precision} por classe e média macro;
+    \item \textbf{Recall} por classe e média macro;
+    \item \textbf{F1-score} por classe e média macro;
+    \item \textbf{Matriz de confusão} para análise de erros entre categorias.
+\end{itemize}
+
+\subsection{Justificativa para uso complementar}
+
+Em cenários com desbalanceamento entre classes, a acurácia pode ser enganosa (o modelo pode favorecer classes mais frequentes). As métricas macro e a matriz de confusão ajudam a identificar quais classes estão sendo subestimadas ou confundidas.
+
+% --------------------------------------------------------------------
+\clearpage
+\section{Considerações Finais}
+
+Com base na EDA realizada sobre boletins epidemiológicos em PDF (11 documentos, segmentados em 60 chunks), o grupo definiu uma abordagem metodológica coerente para classificação textual supervisionada. O pipeline de tratamento (extração, limpeza, tokenização, chunking e construção do dataset) fornece uma base reprodutível para o treino de modelos via TF-IDF.
+
+Do ponto de vista teórico, a escolha de TF-IDF, Naive Bayes Multinomial e Regressão Logística multiclasse oferece bom equilíbrio entre interpretabilidade, desempenho e viabilidade de execução. Do ponto de vista avaliativo, a acurácia é definida de forma explícita e acompanhada por métricas complementares apropriadas para classificação multiclasse.
+
+\vspace{0.3cm}
+\noindent
+\textbf{Fonte oficial dos boletins:} \\
+\url{https://prefeitura.sp.gov.br/web/saude/w/vigilancia_em_saude/boletim_covisa/arboviroses}
+
+\end{document}
