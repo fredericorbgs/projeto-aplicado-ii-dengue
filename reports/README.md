@@ -19,3 +19,4 @@ Esta pasta concentra as entregas academicas por etapa, incluindo fonte em LaTeX 
 
 - `etapa-1/Etapa1.tex` e `etapa-1/Etapa1.pdf`
 - `etapa-2/Etapa2_A2_metodologia.tex` e `etapa-2/Etapa2.pdf`
+- `etapa-3/Etapa3_A3_aplicando_conhecimento.tex` (fonte da Etapa 3)

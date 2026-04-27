@@ -1,4 +1,4 @@
-"""Modulo de modelagem (Etapa 2).
+"""Modulo de modelagem (Etapas 2 e 3).
 
 Este arquivo implementa o "plano de treinamento" descrito nos relatorios:
 - Vetorizacao TF-IDF
@@ -16,7 +16,7 @@ from __future__ import annotations
 import argparse
 import json
 from pathlib import Path
-from typing import Dict, Tuple
+from typing import Dict, List
 
 import pandas as pd
 from sklearn.feature_extraction.text import TfidfVectorizer
@@ -79,11 +79,7 @@ def _build_models() -> Dict[str, Pipeline]:
             ("tfidf", vectorizer),
             (
                 "clf",
-                LogisticRegression(
-                    max_iter=2000,
-                    multi_class="multinomial",
-                    solver="lbfgs",
-                ),
+                LogisticRegression(max_iter=2000, solver="lbfgs"),
             ),
         ]
     )
@@ -130,7 +126,17 @@ def train_models(
     MODELS_DIR.mkdir(parents=True, exist_ok=True)
     METRICS_JSON.parent.mkdir(parents=True, exist_ok=True)
 
-    metrics_summary: Dict[str, object] = {}
+    class_order: List[str] = sorted(set(y_test))
+
+    metrics_summary: Dict[str, object] = {
+        "dataset_summary": {
+            "n_total_samples": int(len(labeled)),
+            "n_train_samples": int(len(X_train)),
+            "n_val_samples": int(len(X_val)),
+            "n_test_samples": int(len(X_test)),
+            "class_order_test": class_order,
+        }
+    }
 
     for name, model in models.items():
         # Observacao: por enquanto nao persistimos os modelos (etapa 3 provavelmente exige).
@@ -142,8 +148,9 @@ def train_models(
 
         metrics_summary[name] = {
             "accuracy": float(acc),
-            "classification_report": classification_report(y_test, y_pred, output_dict=True),
-            "confusion_matrix": confusion_matrix(y_test, y_pred).tolist(),
+            "classification_report": classification_report(y_test, y_pred, output_dict=True, zero_division=0),
+            "confusion_matrix": confusion_matrix(y_test, y_pred, labels=class_order).tolist(),
+            "confusion_matrix_labels": class_order,
             "n_test_samples": int(len(y_test)),
             "n_classes": int(len(sorted(set(y_test)))),
         }

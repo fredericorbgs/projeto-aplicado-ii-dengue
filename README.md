@@ -58,18 +58,20 @@ Detalhes adicionais em `docs/fontes-dados.md`.
 |   |-- config.py          # paths e convencoes
 |   |-- data_collection.py # importacao de PDFs para data/raw
 |   |-- preprocessing.py   # extracao + limpeza + chunking + EDA
+|   |-- labeling.py        # pseudo-rotulagem inicial para etapa 3
 |   |-- modeling.py        # TF-IDF + treino supervisionado
 |   `-- evaluation.py      # metricas de classificacao
 `-- requirements.txt
 ```
 
-## Fluxo tecnico (etapa 2)
+## Fluxo tecnico (etapas 2 e 3)
 
 1. Importar PDFs para o projeto (`src/data_collection.py`).
 2. Extrair e limpar texto (`src/preprocessing.py`).
 3. Gerar chunks e dataset consolidado (`data/processed/chunks_dataset.csv`).
 4. Gerar resumo de EDA (`data/processed/eda_summary.md` e `.json`).
-5. Preparar rotulos em `data/processed/labels.csv` para treino supervisionado.
+5. Gerar rotulos iniciais em `data/processed/labels.csv` (`src/labeling.py`) e revisar manualmente quando necessario.
+6. Treinar e avaliar modelos supervisionados (`src/modeling.py`).
 
 ## Como executar
 
@@ -93,7 +95,13 @@ python3 -m src.data_collection --input-dir "/caminho/para/boletins"
 python3 -m src.preprocessing --input-dir "/caminho/para/boletins" --force
 ```
 
-### 4) Treinar modelos (apos rotular `labels.csv`)
+### 4) Gerar rotulos iniciais (Etapa 3)
+
+```bash
+python3 -m src.labeling --dataset-csv data/processed/chunks_dataset.csv --labels-csv data/processed/labels.csv
+```
+
+### 5) Treinar modelos (apos gerar/revisar `labels.csv`)
 
 ```bash
 python3 -m src.modeling --labels-csv data/processed/labels.csv
@@ -117,4 +125,4 @@ python3 -m src.modeling --labels-csv data/processed/labels.csv
 
 - Etapa 1: concluida
 - Etapa 2: concluida (documentacao + implementacao)
-- Etapa 3: em preparacao (rotulagem e treino supervisionado)
+- Etapa 3: em andamento (metodo aplicado, metricas e relatorio preliminar)

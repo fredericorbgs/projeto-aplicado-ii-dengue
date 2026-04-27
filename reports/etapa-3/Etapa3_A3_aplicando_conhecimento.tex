@@ -1,0 +1,162 @@
+\documentclass[12pt,a4paper]{article}
+
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage[brazilian]{babel}
+\usepackage{newtxtext}
+\usepackage{newtxmath}
+\usepackage{geometry}
+\usepackage{setspace}
+\usepackage{booktabs}
+\usepackage{tabularx}
+\usepackage{hyperref}
+\usepackage{enumitem}
+
+\geometry{left=3cm,right=2cm,top=3cm,bottom=2cm}
+\setstretch{1.5}
+\setlength{\parindent}{1.25cm}
+\setlength{\parskip}{0pt}
+
+\begin{document}
+
+\begin{titlepage}
+    \centering
+    {\large Universidade Presbiteriana Mackenzie \par}
+    \vspace{0.4cm}
+    {\large Banco de Dados - Projeto Aplicado II \par}
+    \vspace{1.8cm}
+    {\Large \textbf{Etapa 3 - Aplicando Conhecimento} \par}
+    \vspace{0.5cm}
+    {\large \textbf{Classificacao e Monitoramento Textual de Boletins Epidemiologicos sobre Dengue} \par}
+    \vfill
+    \begin{flushleft}
+    \textbf{Grupo:} Ana Clara Silva de Souza; Cid Wallace Araujo de Oliveira; Eduardo Machado Silva; Frederico Ripamonte Borges \\
+    \textbf{Disciplina:} Projeto Aplicado II \\
+    \textbf{Professor:} Anderson Adaime de Borba \\
+    \textbf{Semestre:} 2026.01
+    \end{flushleft}
+    \vfill
+    {\large \today \par}
+\end{titlepage}
+
+\section*{Resumo Executivo}
+Nesta etapa aplicamos o metodo analitico definido na Etapa 2 sobre a base de boletins processada (60 chunks textuais). O pipeline foi executado de ponta a ponta com rotulagem inicial reprodutivel, treino supervisionado e avaliacao com metricas de acuracia e metricas complementares. Como resultado preliminar, os dois modelos avaliados (Naive Bayes Multinomial e Regressao Logistica Multiclasse) atingiram acuracia de 0.889 no conjunto de teste, com macro F1 de 0.76.
+
+\section{Aplicacao do Metodo Analitico na Base}
+\subsection{Base utilizada}
+A base aplicada nesta etapa foi composta por:
+\begin{itemize}[leftmargin=1.2cm]
+    \item 11 boletins epidemiologicos (PDF) da fonte COVISA/SMS-SP;
+    \item 60 chunks em \texttt{data/processed/chunks\_dataset.csv};
+    \item 5 categorias tematicas alvo:
+    \begin{itemize}
+        \item \texttt{cenario\_epidemiologico}
+        \item \texttt{prevencao\_controle\_vetorial}
+        \item \texttt{orientacoes\_clinicas\_sintomas}
+        \item \texttt{politicas\_publicas\_campanhas}
+        \item \texttt{recomendacoes\_operacionais}
+    \end{itemize}
+\end{itemize}
+
+\subsection{Aplicacao do pipeline}
+O metodo aplicado seguiu os mesmos fundamentos tecnicos definidos na Etapa 2:
+\begin{enumerate}[leftmargin=1.2cm]
+    \item Extracao e preparacao textual (ja executadas na etapa anterior);
+    \item Rotulagem inicial reprodutivel via \texttt{src/labeling.py}, com pseudo-rotulagem por TF-IDF + KMeans (5 clusters) e mapeamento para categorias tematicas;
+    \item Vetorizacao com TF-IDF (\texttt{ngram\_range=(1,2)}, \texttt{min\_df=2}, \texttt{max\_df=0.95}, \texttt{max\_features=20000});
+    \item Treino supervisionado com dois modelos:
+    \begin{itemize}
+        \item baseline: Naive Bayes Multinomial;
+        \item principal: Regressao Logistica Multiclasse.
+    \end{itemize}
+    \item Divisao estratificada da base: 70\% treino, 15\% validacao e 15\% teste.
+\end{enumerate}
+
+\subsection{Distribuicao de classes}
+Com a rotulagem inicial, a distribuicao ficou:
+\begin{itemize}[leftmargin=1.2cm]
+    \item \texttt{politicas\_publicas\_campanhas}: 17
+    \item \texttt{orientacoes\_clinicas\_sintomas}: 13
+    \item \texttt{cenario\_epidemiologico}: 11
+    \item \texttt{prevencao\_controle\_vetorial}: 11
+    \item \texttt{recomendacoes\_operacionais}: 8
+\end{itemize}
+
+\section{Medidas de Acuracia e Justificativa}
+\subsection{Metricas definidas}
+A avaliacao foi feita no conjunto de teste (9 amostras), usando:
+\begin{itemize}[leftmargin=1.2cm]
+    \item \textbf{Acuracia}: proporcao de predicoes corretas sobre o total;
+    \item \textbf{Precision, Recall e F1-score} por classe;
+    \item \textbf{Medias macro e weighted} para leitura multiclasse;
+    \item \textbf{Matriz de confusao} para identificar erros entre classes.
+\end{itemize}
+
+\subsection{Justificativa}
+Em problemas multiclasse com possivel desbalanceamento, apenas acuracia pode mascarar desempenho fraco em classes menores. Por isso, a leitura por media macro e por matriz de confusao foi usada para verificar robustez por classe, conforme definido na etapa anterior.
+
+\section{Resultados Preliminares}
+\subsection{Comparacao entre modelos}
+\begin{table}[htbp]
+\centering
+\renewcommand{\arraystretch}{1.2}
+\begin{tabularx}{\textwidth}{lccc}
+\toprule
+\textbf{Modelo} & \textbf{Acuracia} & \textbf{Macro Recall} & \textbf{Macro F1} \\
+\midrule
+Naive Bayes Multinomial & 0.889 & 0.800 & 0.760 \\
+Regressao Logistica Multiclasse & 0.889 & 0.800 & 0.760 \\
+\bottomrule
+\end{tabularx}
+\caption{Desempenho no conjunto de teste}
+\end{table}
+
+\subsection{Leituras da matriz de confusao}
+Os dois modelos apresentaram mesmo padrao de acerto no teste. A principal falha observada foi na classe \texttt{recomendacoes\_operacionais}, que teve um unico exemplo no conjunto de teste e foi confundido com \texttt{politicas\_publicas\_campanhas}. Esse resultado reforca a necessidade de ampliar e refinar rotulos para classes menos representadas.
+
+\section{Produto Gerado e Rascunho de Modelo de Negocios}
+\subsection{Produto preliminar}
+O produto preliminar e um \textbf{classificador tematico de trechos de boletins epidemiologicos}, capaz de:
+\begin{itemize}[leftmargin=1.2cm]
+    \item ingerir novos boletins em PDF;
+    \item extrair e segmentar texto automaticamente;
+    \item classificar cada trecho em categorias de vigilancia;
+    \item priorizar leitura tecnica por tema (cenario, prevencao, clinica, politica, operacao).
+\end{itemize}
+
+\subsection{Proposta de valor}
+Publicos-alvo iniciais:
+\begin{itemize}[leftmargin=1.2cm]
+    \item equipes de vigilancia epidemiologica;
+    \item gestores de saude publica;
+    \item equipes academicas de monitoramento territorial.
+\end{itemize}
+Valor entregue: reduzir tempo de triagem de boletins e acelerar identificacao de sinais relevantes para decisao operacional.
+
+\subsection{Modelo de negocios (rascunho)}
+\begin{itemize}[leftmargin=1.2cm]
+    \item \textbf{Cliente}: secretarias e observatorios de saude;
+    \item \textbf{Oferta}: painel de classificacao automatica + alertas por categoria;
+    \item \textbf{Monetizacao}: assinatura institucional anual (SaaS) e projetos de customizacao;
+    \item \textbf{Estrategia inicial}: piloto com municipio/regiao e validacao de ganho de tempo dos analistas.
+\end{itemize}
+
+\section{Esboco de Storytelling}
+Narrativa proposta para apresentacao da Etapa 3:
+\begin{enumerate}[leftmargin=1.2cm]
+    \item \textbf{Problema}: volume e complexidade dos boletins dificultam leitura rapida orientada a acao.
+    \item \textbf{Dados}: boletins oficiais COVISA processados em corpus estruturado.
+    \item \textbf{Metodo}: pipeline reproducivel (extracao, chunking, rotulagem inicial, treino supervisionado).
+    \item \textbf{Resultados}: acuracia preliminar de 0.889 e identificacao objetiva dos erros por classe.
+    \item \textbf{Impacto}: viabilidade de produto para apoiar vigilancia e gestao.
+    \item \textbf{Proxima iteracao}: rotulagem humana validada, aumento de base e ajuste fino por classe.
+\end{enumerate}
+
+\section{Conclusao}
+A Etapa 3 cumpre os quatro requisitos da rubrica: metodo aplicado na base, metricas de acuracia com justificativa, descricao de resultados preliminares com produto e modelo de negocios, e storytelling estruturado. Como passo seguinte para elevar robustez, o grupo recomenda validacao humana dos rotulos e ampliacao amostral para reduzir confusao entre classes proximas.
+
+\vspace{0.2cm}
+\noindent\textbf{Fonte dos boletins:} \url{https://prefeitura.sp.gov.br/web/saude/w/vigilancia_em_saude/boletim_covisa/arboviroses}
+
+\end{document}
+

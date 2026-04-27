@@ -174,3 +174,20 @@ Use este checklist como guia interno de qualidade para aumentar chance de pontua
 7. Esboco de storytelling.
 8. Consideracoes finais e proximos passos.
 
+## 13) Atualizacao executada em 2026-04-27 (inicio Etapa 3)
+
+Atividades ja executadas:
+
+1. Rotulagem inicial reproduzivel implementada em `src/labeling.py` (TF-IDF + KMeans + mapeamento tematico).
+2. `data/processed/labels.csv` preenchido com 60 chunks rotulados.
+3. Treino supervisionado executado com `src/modeling.py`.
+4. Metricas geradas em `data/processed/metrics.json`:
+   - acuracia teste: 0.889 (Naive Bayes e Regressao Logistica)
+   - macro recall: 0.800
+   - macro F1: 0.760
+5. Relatorio de rotulagem salvo em:
+   - `data/processed/labeling_report.md`
+   - `data/processed/labeling_report.json`
+6. Relatorio academico da Etapa 3 criado em:
+   - `reports/etapa-3/Etapa3_A3_aplicando_conhecimento.tex`
+
